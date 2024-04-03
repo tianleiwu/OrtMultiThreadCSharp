@@ -13,10 +13,11 @@ var mask = Enumerable.Repeat(1L, 27 * 52).ToArray();
 var tokenTypeIds = Enumerable.Repeat(0L, 27 * 52).ToArray();
 
 // Try running multiple inputs in parallel
-int thread_count = 20;
-for (int i = 0; i < thread_count; i++)
+int test_count = 20;
+int thread_count = 10;
+for (int i = 0; i < test_count; i++)
 {
-    Enumerable.Range(0, 4).AsParallel().ForAll(_ =>
+    Enumerable.Range(0, thread_count).AsParallel().ForAll(_ =>
     {
         var output = session.Run(new[] {
         NamedOnnxValue.CreateFromTensor("input_ids", new DenseTensor<long>(inputIds, new[] { 27, 52 })),
@@ -26,5 +27,5 @@ for (int i = 0; i < thread_count; i++)
     });
 }
 
-Console.WriteLine("Finished {0} testing threads. No problem found.", thread_count);
+Console.WriteLine("Finished testing {0} threads {1} times. No problem found.", thread_count, test_count);
 return;
